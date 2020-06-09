@@ -1,5 +1,8 @@
 package com.lhr13.newyorkcab.pojo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Cab {
     private String medallion;
     private String hack_license;
@@ -150,6 +153,7 @@ public class Cab {
     public void setDropoff_latitude(String dropoff_latitude) {
         this.dropoff_latitude = dropoff_latitude;
     }
+
 
     public Cab(String medallion, String hack_license,
                String vendor_id, String rate_code,
