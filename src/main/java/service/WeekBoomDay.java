@@ -1,20 +1,24 @@
 package service;
 
+
+import com.lhr13.newyorkcab.dao.DayDAO;
 import com.lhr13.newyorkcab.pojo.Cab;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
+import org.springframework.beans.factory.annotation.Autowired;
 import scala.Serializable;
-import scala.Tuple2;
 
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-public class MoreCustomer implements Serializable {
-    public void run() throws Exception {
+public class WeekBoomDay implements Serializable {
+    @Autowired
+    private DayDAO dayDAO;
+
+    public Map<String, Long> run() throws Exception {
         SparkConf conf = new SparkConf().setAppName("NewYarkCab").setMaster("local");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
 
@@ -55,46 +59,54 @@ public class MoreCustomer implements Serializable {
             }
         });
 
-        JavaRDD<Cab> wash = cabrecord.filter(new Function<Cab, Boolean>() {
+        JavaRDD<Cab> wash = cabrecord.filter((Function<Cab, Boolean>) cab
+                -> cab.getPickup_datatime() != "null"
+                && cab != null);
+
+        JavaRDD<String> day = wash.map((Function<Cab, String>) cab
+                -> cab.getPickup_datatime().substring(0,10));
+
+
+        JavaRDD<String> day2 = day.map(new Function<String, String>() {
             @Override
-            public Boolean call(Cab cab) throws Exception {
-                return cab.getPickup_latitude() != "null" &&
-                        cab.getPickup_longitude() != "null" &&
-                        Integer.valueOf(cab.getPassenger_count()) >= 3 &&
-                        cab != null;
+            public String call(String dates) throws Exception {
+                int numday = weeknum(dates);
+                if (numday == 1) {
+                    return "1";
+                }else if (numday == 2) {
+                    return "2";
+                }else if (numday == 3) {
+                    return "3";
+                }else if (numday == 4) {
+                    return "4";
+                }else if (numday == 5) {
+                    return "5";
+                }else if (numday == 6) {
+                    return "6";
+                }else {
+                    return "7";
+                }
+            }
+            private int weeknum(String dates) {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+                Date d=null;
+                try {
+                    d=f.parse(dates);
+                } catch (ParseException e) {
+
+                    e.printStackTrace();
+                }
+                cal.setTime(d);
+                int w=cal.get(Calendar.DAY_OF_WEEK)-1;
+                if(w==0) w=7;
+                return w;
             }
         });
 
-        JavaRDD<String> more = wash.map(new Function<Cab, String>() {
-            @Override
-            public String call(Cab cab) throws Exception {
-                String latitude = cab.getPickup_latitude();
-                String longitude = cab.getPickup_longitude();
-                return latitude+longitude;
-            }
-        });
+        Map<String, Long> map = day2.countByValue();
 
-//        PairFunction<String, String, Long> keyData = new PairFunction<String, String, Long>() {
-//            @Override
-//            public Tuple2<String, Long> call(String s) throws Exception {
-//                return new Tuple2(s, (long)1);
-//            }
-//        };
-//
-//        JavaPairRDD<String, Long> morePairs = more.mapToPair(keyData);
-//
-//        JavaPairRDD<String, Long> endPairs = morePairs.reduceByKey(new Function2<Long, Long, Long>() {
-//            @Override
-//            public Long call(Long aLong, Long aLong2) throws Exception {
-//                return aLong + aLong2;
-//            }
-//        });
-//
-//        endPairs.saveAsTextFile("/media/hadoop/DATA/myJavaProjections/MoreCuntomer");
+        return map;
 
-        Map<String, Long> morePassagers = more.countByValue();
-        for (Map.Entry<String, Long> map1 : morePassagers.entrySet()) {
-            System.out.println(map1.getKey() + " " + map1.getValue());
-        }
     }
 }

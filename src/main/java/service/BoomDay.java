@@ -10,19 +10,25 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.sql.*;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import scala.Serializable;
 import scala.Tuple2;
 
-import java.util.Map;
+import java.util.*;
 
-@Component
 public class BoomDay implements Serializable {
     @Autowired
     private DayDAO dayDAO;
 
-    public void run() throws Exception {
+    public Map<String, Long> run() throws Exception {
         SparkConf conf = new SparkConf().setAppName("NewYarkCab").setMaster("local");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
 
@@ -77,17 +83,44 @@ public class BoomDay implements Serializable {
             }
         });
 
-        PairFunction<String, String, Long> keyData = (PairFunction<String, String, Long>) s -> new Tuple2(s, (long)1);
+//        PairFunction<String, String, Long> keyData = (PairFunction<String, String, Long>) s -> new Tuple2(s, (long)1);
+//
+//        JavaPairRDD<String, Long> dayPairs = day.mapToPair(keyData);
+//
+//        JavaPairRDD<String, Long> endPairs = dayPairs.reduceByKey(new Function2<Long, Long, Long>() {
+//            @Override
+//            public Long call(Long aLong, Long aLong2) throws Exception {
+//                return aLong + aLong2;
+//            }
+//        });
 
-        JavaPairRDD<String, Long> dayPairs = day.mapToPair(keyData);
+        Map<String, Long> map = day.countByValue();
+        return map;
 
-        JavaPairRDD<String, Long> endPairs = dayPairs.reduceByKey(new Function2<Long, Long, Long>() {
-            @Override
-            public Long call(Long aLong, Long aLong2) throws Exception {
-                return aLong + aLong2;
-            }
-        });
-
-        endPairs.saveAsTextFile("/media/hadoop/DATA/myJavaProjections/output2");
+//        SQLContext sqlContext = new SQLContext(sc);
+//        String url = "jdbc:mysql://localhost:3306/day";
+//        Properties connectionProperties = new Properties();
+//        connectionProperties.put("user", "root");
+//        connectionProperties.put("password", "lhr13");
+//        connectionProperties.put("driver", "com.mysql.jdbc.Driver");
+//
+//        JavaRDD<Row> mapRDD = endPairs.map(new Function<Tuple2<String, Long>, Row>() {
+//            @Override
+//            public Row call(Tuple2<String, Long> stringLongTuple2) throws Exception {
+//                return RowFactory.create(stringLongTuple2._1, stringLongTuple2._2);
+//            }
+//        });
+//
+//        List structFields = new ArrayList();
+//        structFields.add(DataTypes.createStructField("day", DataTypes.StringType, true));
+//        structFields.add(DataTypes.createStructField("count", DataTypes.LongType, true));
+//
+//        StructType structType = DataTypes.createStructType(structFields);
+//
+//        Dataset<Row> dayDF = sqlContext.createDataFrame(mapRDD, structType);
+//
+//        dayDF.write().mode("append").jdbc(url,"day",connectionProperties);
+//
+//        endPairs.saveAsTextFile("/media/hadoop/DATA/myJavaProjections/output2");
     }
 }
