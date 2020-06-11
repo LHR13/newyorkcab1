@@ -1,23 +1,15 @@
 package com.lhr13.newyorkcab.controller;
 
-import com.lhr13.newyorkcab.dao.DayDAO;
-import com.lhr13.newyorkcab.dao.LorSDAO;
-import com.lhr13.newyorkcab.dao.MctDAO;
-import com.lhr13.newyorkcab.dao.WbdDAO;
-import com.lhr13.newyorkcab.pojo.Day;
-import com.lhr13.newyorkcab.pojo.LorS;
-import com.lhr13.newyorkcab.pojo.Mct;
-import com.lhr13.newyorkcab.pojo.Wbd;
+import com.lhr13.newyorkcab.dao.*;
+import com.lhr13.newyorkcab.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin
 @Controller
@@ -31,6 +23,8 @@ public class FindController {
     private WbdDAO wbdDAO;
     @Autowired
     private MctDAO mctDAO;
+    @Autowired
+    private GptDAO gptDAO;
 
     @RequestMapping("/dayfindAll")
     @ResponseBody
@@ -96,5 +90,29 @@ public class FindController {
             }
         });
         return all;
+    }
+
+    @RequestMapping("/gptfindAll")
+    @ResponseBody
+    public List<Gpt> gptfindAll() {
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(new Sort.Order(Sort.Direction.ASC, "passagernum"));
+        orders.add(new Sort.Order(Sort.Direction.ASC, "time"));
+        return gptDAO.findAll(Sort.by(orders));
+//        List all = gptDAO.findAll();
+//        Collections.sort(all, new Comparator<Gpt>() {
+//            @Override
+//            public int compare(Gpt o1, Gpt o2) {
+//                int diff = Integer.valueOf(o1.getPassagernum()) - Integer.valueOf(o2.getPassagernum());
+//                if (diff > 0) {
+//                    return 1;
+//                }else if (diff < 0) {
+//                    return -1;
+//                }else {
+//                    return 0;
+//                }
+//            }
+//        });
+//        return all;
     }
 }

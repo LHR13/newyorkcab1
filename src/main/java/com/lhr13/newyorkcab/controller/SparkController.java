@@ -1,22 +1,13 @@
 package com.lhr13.newyorkcab.controller;
 
-import com.lhr13.newyorkcab.dao.DayDAO;
-import com.lhr13.newyorkcab.dao.LorSDAO;
-import com.lhr13.newyorkcab.dao.MctDAO;
-import com.lhr13.newyorkcab.dao.WbdDAO;
-import com.lhr13.newyorkcab.pojo.Day;
-import com.lhr13.newyorkcab.pojo.LorS;
-import com.lhr13.newyorkcab.pojo.Mct;
-import com.lhr13.newyorkcab.pojo.Wbd;
+import com.lhr13.newyorkcab.dao.*;
+import com.lhr13.newyorkcab.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import service.BoomDay;
-import service.LongOrShort;
-import service.MoreCustomerTime;
-import service.WeekBoomDay;
+import service.*;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +23,8 @@ public class SparkController {
     private WbdDAO wbdDAO;
     @Autowired
     private MctDAO mctDAO;
+    @Autowired
+    private GptDAO gptDAO;
 
 
     @RequestMapping("/bd")
@@ -77,6 +70,20 @@ public class SparkController {
             mct.setHour(m.getKey());
             mct.setCount(m.getValue());
             mctDAO.save(mct);
+        }
+    }
+
+    @RequestMapping("/gpt")
+    public void gpt() throws Exception {
+        Map<String, Long> map = new GetPlatoonTime().run();
+        for (Map.Entry<String, Long> m : map.entrySet()) {
+            String passagernum = m.getKey().split(",")[0];
+            String time = m.getKey().split(",")[1];
+            Gpt gpt = new Gpt();
+            gpt.setPassagernum(passagernum);
+            gpt.setTime(time);
+            gpt.setCount(m.getValue());
+            gptDAO.save(gpt);
         }
     }
 }

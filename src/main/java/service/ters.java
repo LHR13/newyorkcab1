@@ -43,6 +43,7 @@ public class ters {
 //        System.out.println(new ters().sss("2020-06-11"));
 //        new WeekBoomDay().run();
 //        new MoreCustomerTime().run();
+        new GetPlatoonTime().run();
 
     }
 }

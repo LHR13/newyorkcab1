@@ -29,4 +29,15 @@ public class ShowController {
     public String mct() {
         return "MoreCustomerTime.html";
     }
+
+    @GetMapping("/getplatoontime")
+    public String gpt() {
+        return "GetPlatoonTime.html";
+    }
+
+    @GetMapping("/welcome")
+    public String wel() {
+        return "welcome.html";
+    }
+
 }
