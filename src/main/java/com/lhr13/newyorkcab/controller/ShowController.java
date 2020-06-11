@@ -35,9 +35,16 @@ public class ShowController {
         return "GetPlatoonTime.html";
     }
 
+    @GetMapping("/distancecount")
+    public String dcct() {
+        return "DistanceCount.html";
+    }
+
     @GetMapping("/welcome")
     public String wel() {
         return "welcome.html";
     }
+
+
 
 }

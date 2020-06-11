@@ -3,13 +3,10 @@ package com.lhr13.newyorkcab.controller;
 import com.lhr13.newyorkcab.dao.*;
 import com.lhr13.newyorkcab.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import service.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +22,8 @@ public class SparkController {
     private MctDAO mctDAO;
     @Autowired
     private GptDAO gptDAO;
+    @Autowired
+    private DCDAO dcDAO;
 
 
     @RequestMapping("/bd")
@@ -86,4 +85,16 @@ public class SparkController {
             gptDAO.save(gpt);
         }
     }
+
+    @RequestMapping("/dcct")
+    public void dcct() throws Exception {
+        Map<String, Long> map = new DistanceCount().run();
+        for (Map.Entry<String, Long> m : map.entrySet()) {
+            DcCt dcCt = new DcCt();
+            dcCt.setDistance(m.getKey());
+            dcCt.setCount(m.getValue());
+            dcDAO.save(dcCt);
+        }
+    }
+
 }

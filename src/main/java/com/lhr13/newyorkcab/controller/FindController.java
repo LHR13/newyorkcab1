@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @CrossOrigin
 @Controller
@@ -25,6 +28,8 @@ public class FindController {
     private MctDAO mctDAO;
     @Autowired
     private GptDAO gptDAO;
+    @Autowired
+    private DCDAO dcDAO;
 
     @RequestMapping("/dayfindAll")
     @ResponseBody
@@ -99,20 +104,25 @@ public class FindController {
         orders.add(new Sort.Order(Sort.Direction.ASC, "passagernum"));
         orders.add(new Sort.Order(Sort.Direction.ASC, "time"));
         return gptDAO.findAll(Sort.by(orders));
-//        List all = gptDAO.findAll();
-//        Collections.sort(all, new Comparator<Gpt>() {
-//            @Override
-//            public int compare(Gpt o1, Gpt o2) {
-//                int diff = Integer.valueOf(o1.getPassagernum()) - Integer.valueOf(o2.getPassagernum());
-//                if (diff > 0) {
-//                    return 1;
-//                }else if (diff < 0) {
-//                    return -1;
-//                }else {
-//                    return 0;
-//                }
-//            }
-//        });
-//        return all;
+    }
+
+    @RequestMapping("/dcctfindAll")
+    @ResponseBody
+    public List<Mct> dcctfindAll() {
+        List all = dcDAO.findAll();
+        Collections.sort(all, new Comparator<DcCt>() {
+            @Override
+            public int compare(DcCt o1, DcCt o2) {
+                int diff = Integer.valueOf(o1.getDistance()) - Integer.valueOf(o2.getDistance());
+                if (diff > 0) {
+                    return 1;
+                }else if (diff < 0) {
+                    return -1;
+                }else {
+                    return 0;
+                }
+            }
+        });
+        return all;
     }
 }
