@@ -1,7 +1,6 @@
-package service;
+package com.lhr13.newyorkcab.data;
 
 import com.lhr13.newyorkcab.pojo.Cab;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
@@ -9,11 +8,7 @@ import scala.Serializable;
 
 public class CatchData implements Serializable {
 
-    public JavaRDD<Cab> CatchData() throws Exception {
-        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
-        System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
-
-        JavaSparkContext sc = new JavaSparkContext(conf);
+    public JavaRDD<Cab> CatchData(JavaSparkContext sc) throws Exception {
 
         JavaRDD<String> file = sc.textFile("hdfs://localhost:9000/newYorkCab/trip_data_10.csv").cache();
 
@@ -22,7 +17,6 @@ public class CatchData implements Serializable {
             String[] strings = s.split(",");
             if (strings.length == 14) {
                 // 防止空值
-                int flag = 0;
                 for (int i = 0; i < 14; i++) {
 
                     if (strings[i] == null) {
@@ -48,4 +42,6 @@ public class CatchData implements Serializable {
         });
         return cabrecord;
     }
+
+
 }

@@ -1,15 +1,15 @@
 package com.lhr13.newyorkcab.controller;
 
 import com.lhr13.newyorkcab.dao.*;
+import com.lhr13.newyorkcab.data.*;
 import com.lhr13.newyorkcab.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import service.*;
 
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/spark")
 public class SparkController {
     @Autowired
@@ -27,31 +27,31 @@ public class SparkController {
 
 
     @RequestMapping("/bd")
-    public void hello() throws Exception {
+    public String hello() throws Exception {
         Map<String, Long> map = new BoomDay().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             Day day = new Day();
             day.setDay(m.getKey());
             day.setCount(m.getValue());
             dayDAO.save(day);
-            System.out.println(m.getKey() + " " + m.getValue());
         }
+        return "success.html";
     }
 
     @RequestMapping("/lors")
-    public void lors() throws Exception {
+    public String lors() throws Exception {
         Map<String, Long> map = new LongOrShort().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             LorS lorS = new LorS();
             lorS.setLongorshort(m.getKey());
             lorS.setCount(m.getValue());
             lorSDAO.save(lorS);
-            System.out.println(m.getKey() + " " + m.getValue());
         }
+        return "success.html";
     }
 
     @RequestMapping("/wbd")
-    public void wbd() throws Exception {
+    public String wbd() throws Exception {
         Map<String, Long> map = new WeekBoomDay().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             Wbd wbd = new Wbd();
@@ -59,10 +59,11 @@ public class SparkController {
             wbd.setCount(m.getValue());
             wbdDAO.save(wbd);
         }
+        return "success.html";
     }
 
     @RequestMapping("/mct")
-    public void mct() throws Exception {
+    public String mct() throws Exception {
         Map<String, Long> map = new MoreCustomerTime().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             Mct mct = new Mct();
@@ -70,10 +71,11 @@ public class SparkController {
             mct.setCount(m.getValue());
             mctDAO.save(mct);
         }
+        return "success.html";
     }
 
     @RequestMapping("/gpt")
-    public void gpt() throws Exception {
+    public String gpt() throws Exception {
         Map<String, Long> map = new GetPlatoonTime().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             String passagernum = m.getKey().split(",")[0];
@@ -84,10 +86,11 @@ public class SparkController {
             gpt.setCount(m.getValue());
             gptDAO.save(gpt);
         }
+        return "success.html";
     }
 
     @RequestMapping("/dcct")
-    public void dcct() throws Exception {
+    public String dcct() throws Exception {
         Map<String, Long> map = new DistanceCount().run();
         for (Map.Entry<String, Long> m : map.entrySet()) {
             DcCt dcCt = new DcCt();
@@ -95,6 +98,12 @@ public class SparkController {
             dcCt.setCount(m.getValue());
             dcDAO.save(dcCt);
         }
+        return "success.html";
+    }
+
+    @RequestMapping("/ce")
+    public String ce() {
+        return "success.html";
     }
 
 }

@@ -45,6 +45,12 @@ public class ShowController {
         return "welcome.html";
     }
 
+    @GetMapping("/init")
+    public String init() {
+        return "SparkInit.html";
+    }
+
+
 
 
 }

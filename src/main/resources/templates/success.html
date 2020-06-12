@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>success</title>
+<!--    <meta http-equiv="refresh" content="3;url=SparkInit.html">-->
+
+    <script type="text/javascript">
+        window.onload = function(){
+            var time = 3;
+            var secondEle = document.getElementById("second");
+            var timer = setInterval(function(){
+                secondEle.innerHTML = time;
+                time--;
+                if(time==0){
+                    clearInterval(timer);
+                    location.href="/show/init";
+                }
+
+            },1000);
+        }
+    </script>
+</head>
+<body>
+    <h3>初始化成功！</h3>
+    <span style="color:red" id="second">3</span>秒钟后跳转，如不跳转点击<a href="SparkInit.html">这里</a>
+</body>
+</html>

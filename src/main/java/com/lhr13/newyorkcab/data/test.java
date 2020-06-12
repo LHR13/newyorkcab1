@@ -1,9 +1,9 @@
-package service;
+package com.lhr13.newyorkcab.data;
 
 import com.lhr13.newyorkcab.dao.DayDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ters {
+public class test {
     @Autowired
     public DayDAO dayDAO;
 

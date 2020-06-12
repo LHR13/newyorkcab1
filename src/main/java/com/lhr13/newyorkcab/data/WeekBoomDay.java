@@ -1,9 +1,11 @@
-package service;
+package com.lhr13.newyorkcab.data;
 
 
 import com.lhr13.newyorkcab.dao.DayDAO;
 import com.lhr13.newyorkcab.pojo.Cab;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import scala.Serializable;
@@ -19,7 +21,11 @@ public class WeekBoomDay implements Serializable {
     private DayDAO dayDAO;
 
     public Map<String, Long> run() throws Exception {
-        JavaRDD<Cab> cabrecord = new CatchData().CatchData();
+        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
+        System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
+
+        JavaSparkContext sc = new JavaSparkContext(conf);
+        JavaRDD<Cab> cabrecord = new CatchData().CatchData(sc);
 
         JavaRDD<Cab> wash = cabrecord.filter((Function<Cab, Boolean>) cab
                 -> cab.getPickup_datatime() != "null"
@@ -67,6 +73,7 @@ public class WeekBoomDay implements Serializable {
         });
 
         Map<String, Long> map = day2.countByValue();
+        sc.close();
 
         return map;
 
