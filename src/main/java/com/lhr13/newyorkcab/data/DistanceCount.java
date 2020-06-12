@@ -22,8 +22,7 @@ public class DistanceCount implements Serializable {
 
         JavaRDD<Cab> wash = cabrecord.filter((Function<Cab, Boolean>) cab
                 -> cab != null &&
-                cab.getTrip_distance() != "null" &&
-                cab.getTrip_time_in_secs() != "null");
+                cab.getTrip_distance() != "null" );
 
         JavaRDD<String> dtdistinct = wash.map((Function<Cab, String>) cab -> String.valueOf(Math.round(Double.valueOf(cab.getTrip_distance()))));
 

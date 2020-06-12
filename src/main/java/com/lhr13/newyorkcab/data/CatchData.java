@@ -42,6 +42,4 @@ public class CatchData implements Serializable {
         });
         return cabrecord;
     }
-
-
 }
