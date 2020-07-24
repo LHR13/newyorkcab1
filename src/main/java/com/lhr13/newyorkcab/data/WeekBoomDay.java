@@ -1,13 +1,10 @@
 package com.lhr13.newyorkcab.data;
 
-
-import com.lhr13.newyorkcab.dao.DayDAO;
 import com.lhr13.newyorkcab.pojo.Cab;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.springframework.beans.factory.annotation.Autowired;
 import scala.Serializable;
 
 import java.text.ParseException;
@@ -17,11 +14,9 @@ import java.util.Date;
 import java.util.Map;
 
 public class WeekBoomDay implements Serializable {
-    @Autowired
-    private DayDAO dayDAO;
 
     public Map<String, Long> run() throws Exception {
-        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local[4]");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
 
         JavaSparkContext sc = new JavaSparkContext(conf);

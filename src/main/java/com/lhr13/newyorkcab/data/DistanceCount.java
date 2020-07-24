@@ -14,7 +14,7 @@ import java.util.Map;
 public class DistanceCount implements Serializable {
 
     public Map<String, Long> run() throws Exception {
-        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local[4]");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
 
         JavaSparkContext sc = new JavaSparkContext(conf);

@@ -42,7 +42,7 @@ public class test {
 //        new WeekBoomDay().run();
 //        new MoreCustomerTime().run();
 //        new GetPlatoonTime().run();
-        new DistanceCount().run();
-
+//        new DistanceCount().run();
+        new Center().run();
     }
 }

@@ -10,7 +10,7 @@ public class CatchData implements Serializable {
 
     public JavaRDD<Cab> CatchData(JavaSparkContext sc) throws Exception {
 
-        JavaRDD<String> file = sc.textFile("hdfs://localhost:9000/newYorkCab/trip_data_10.csv").cache();
+        JavaRDD<String> file = sc.textFile("hdfs://localhost:9000/newYorkCab/trip_data_10.csv");
 
         JavaRDD<Cab> cabrecord = file.map((Function<String, Cab>) s -> {
             Cab cab;
@@ -39,7 +39,7 @@ public class CatchData implements Serializable {
             }
 
             return cab;
-        });
+        }).cache();
         return cabrecord;
     }
 }
