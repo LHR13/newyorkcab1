@@ -1,13 +1,15 @@
 package com.lhr13.newyorkcab.data;
 
 import com.lhr13.newyorkcab.dao.DayDAO;
+import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.linalg.Vectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class test {
     @Autowired
     public DayDAO dayDAO;
 
-    public double sss() {
+    public void sss() {
 //        Day day = new Day();
 //        day.setDay("fsdljf");
 //        day.setCount((long) 123);
@@ -28,8 +30,14 @@ public class test {
 //        if(w==0) w=7;
 //        return w;
 
-        double a = 1.8;
-        return a - (int)a;
+//        double a = 1.8;
+//        return a - (int)a;
+        double[] s = new double[]{123.456, 456.456};
+        Vector vector = Vectors.dense(s);
+        System.out.println(vector.apply(0));
+        System.out.println(vector.toDense());
+        System.out.println(vector);
+
 
     }
     public static void main(String[] args) throws Exception {
@@ -38,11 +46,11 @@ public class test {
 //        new LongOrShort().run();
 //        new MoreCustomer().run();
 //        new HotAera().run();
-//        System.out.println(new ters().sss());
+        new test().sss();
 //        new WeekBoomDay().run();
 //        new MoreCustomerTime().run();
 //        new GetPlatoonTime().run();
 //        new DistanceCount().run();
-        new Center().run();
+//        new Center().run();
     }
 }

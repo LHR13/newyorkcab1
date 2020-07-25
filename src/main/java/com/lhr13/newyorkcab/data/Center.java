@@ -12,9 +12,11 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.rdd.RDD;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Center implements Serializable {
-    public void run() throws Exception {
+    public List<List<Double>> run() throws Exception {
         SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
 
@@ -28,25 +30,30 @@ public class Center implements Serializable {
                         && cab.getPickup_latitude() != "null"
                         && cab != null));
 
-        JavaRDD<String> point = wash.map((Function<Cab, String>) cab -> cab.getPickup_latitude() + "," + cab.getPickup_longitude());
+        JavaRDD<String> point = wash.map((Function<Cab, String>) cab -> cab.getPickup_latitude()
+                + "," + cab.getPickup_longitude());
 
-        JavaRDD<Vector> pickpoint = point.map(new Function<String, Vector>() {
-            @Override
-            public Vector call(String s) throws Exception {
-                String[] arr = s.split(",");
-                double[] pt = new double[2];
-                for (int i = 0; i < arr.length; i++) {
-                    pt[i] = new Double(arr[i]);
-                }
-                return Vectors.dense(pt);
+        JavaRDD<Vector> pickpoint = point.map((Function<String, Vector>) s -> {
+            String[] arr = s.split(",");
+            double[] pt = new double[2];
+            for (int i = 0; i < arr.length; i++) {
+                pt[i] = new Double(arr[i]);
             }
+            return Vectors.dense(pt);
         });
 
         RDD<Vector> rdd = pickpoint.rdd();
 
+        List<List<Double>> xy = new ArrayList<>();
+
         KMeansModel kMeansModel = KMeans.train(rdd, 5, 10);
         for (Vector center : kMeansModel.clusterCenters()) {
             System.out.println(center);
+            List<Double> list = new ArrayList<>();
+            list.add(center.apply(0));
+            list.add(center.apply(1));
+            xy.add(list);
         }
+        return xy;
     }
 }
