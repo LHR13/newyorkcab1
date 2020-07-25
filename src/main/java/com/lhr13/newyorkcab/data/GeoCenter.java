@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Center implements Serializable {
+public class GeoCenter implements Serializable {
     public List<List<Double>> run() throws Exception {
         SparkConf conf = new SparkConf().setAppName("NewYarkCab2").setMaster("local");
         System.setProperty("hadoop.home.dir", "/usr/local/hadoop");
@@ -46,7 +46,7 @@ public class Center implements Serializable {
 
         List<List<Double>> xy = new ArrayList<>();
 
-        KMeansModel kMeansModel = KMeans.train(rdd, 5, 10);
+        KMeansModel kMeansModel = KMeans.train(rdd, 5, 2);
         for (Vector center : kMeansModel.clusterCenters()) {
             System.out.println(center);
             List<Double> list = new ArrayList<>();

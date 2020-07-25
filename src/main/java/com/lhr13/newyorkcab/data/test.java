@@ -46,11 +46,11 @@ public class test {
 //        new LongOrShort().run();
 //        new MoreCustomer().run();
 //        new HotAera().run();
-        new test().sss();
+//        new test().sss();
 //        new WeekBoomDay().run();
 //        new MoreCustomerTime().run();
 //        new GetPlatoonTime().run();
 //        new DistanceCount().run();
-//        new Center().run();
+        new GeoCenter().run();
     }
 }

@@ -40,6 +40,11 @@ public class ShowController {
         return "DistanceCount.html";
     }
 
+    @GetMapping("/geocenter")
+    public String cte() {
+        return "fake.html";
+    }
+
     @GetMapping("/welcome")
     public String wel() {
         return "welcome.html";
@@ -49,8 +54,5 @@ public class ShowController {
     public String init() {
         return "SparkInit.html";
     }
-
-
-
 
 }

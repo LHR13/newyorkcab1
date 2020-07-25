@@ -13,9 +13,9 @@ public class Cte implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private Long latitude;
+    private Double latitude;
     @Column
-    private Long longitude;
+    private Double longitude;
 
     @Override
     public String toString() {
@@ -34,19 +34,19 @@ public class Cte implements Serializable {
         this.id = id;
     }
 
-    public Long getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Long latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public Long getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Long longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 

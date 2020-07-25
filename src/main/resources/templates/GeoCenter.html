@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>上车中心地</title>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+    </style>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=wv0PoAyDYs353uThZHoii1CtHX5auOzs">
+    </script>
+</head>
+
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+    var map = new BMapGL.Map("container");
+    // 创建地图实例
+    var point = new BMapGL.Point(-74.0445004, 40.6892494);
+    var point1 = new BMapGL.Point(-73.975127, 40.691192);
+    var point2 = new BMapGL.Point(-73.915336, 40.743686);
+    var point3 = new BMapGL.Point(-73.979151, 40.581694);
+    var point4 = new BMapGL.Point(-74.218891, 40.640407);
+    var point5 = new BMapGL.Point(-73.940632, 40.792207);
+    // 创建点坐标
+    map.centerAndZoom(point, 15);
+    // 初始化地图，设置中心点坐标和地图级别
+    var circle1 = new BMapGL.Circle(point1,100,{strokeColor:"blue", strokeWeight:20, strokeOpacity:1}); //创建圆
+    var circle2 = new BMapGL.Circle(point2,100,{strokeColor:"blue", strokeWeight:20, strokeOpacity:1}); //创建圆
+    var circle3 = new BMapGL.Circle(point3,100,{strokeColor:"blue", strokeWeight:20, strokeOpacity:1}); //创建圆
+    var circle4 = new BMapGL.Circle(point4,100,{strokeColor:"blue", strokeWeight:20, strokeOpacity:1}); //创建圆
+    var circle5 = new BMapGL.Circle(point5,100,{strokeColor:"blue", strokeWeight:20, strokeOpacity:1}); //创建圆
+
+    map.addOverlay(circle1)
+    map.addOverlay(circle2)
+    map.addOverlay(circle3)
+    map.addOverlay(circle4)
+    map.addOverlay(circle5)
+    map.enableScrollWheelZoom(true);
+</script>
+</body>
+</html>

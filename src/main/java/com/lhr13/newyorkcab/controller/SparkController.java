@@ -25,91 +25,123 @@ public class SparkController {
     private GptDAO gptDAO;
     @Autowired
     private DCDAO dcDAO;
+    @Autowired
+    private CteDAO cteDAO;
 
 
     @RequestMapping("/bd")
-    public String hello() throws Exception {
-        Map<String, Long> map = new BoomDay().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            Day day = new Day();
-            day.setDay(m.getKey());
-            day.setCount(m.getValue());
-            dayDAO.save(day);
+    public String hello() {
+        try {
+            Map<String, Long> map = new BoomDay().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                Day day = new Day();
+                day.setDay(m.getKey());
+                day.setCount(m.getValue());
+                dayDAO.save(day);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
+
     }
 
     @RequestMapping("/lors")
-    public String lors() throws Exception {
-        Map<String, Long> map = new LongOrShort().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            LorS lorS = new LorS();
-            lorS.setLongorshort(m.getKey());
-            lorS.setCount(m.getValue());
-            lorSDAO.save(lorS);
+    public String lors() {
+        try {
+            Map<String, Long> map = new LongOrShort().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                LorS lorS = new LorS();
+                lorS.setLongorshort(m.getKey());
+                lorS.setCount(m.getValue());
+                lorSDAO.save(lorS);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
     }
 
     @RequestMapping("/wbd")
-    public String wbd() throws Exception {
-        Map<String, Long> map = new WeekBoomDay().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            Wbd wbd = new Wbd();
-            wbd.setWeekday(m.getKey());
-            wbd.setCount(m.getValue());
-            wbdDAO.save(wbd);
+    public String wbd() {
+        try {
+            Map<String, Long> map = new WeekBoomDay().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                Wbd wbd = new Wbd();
+                wbd.setWeekday(m.getKey());
+                wbd.setCount(m.getValue());
+                wbdDAO.save(wbd);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
     }
 
     @RequestMapping("/mct")
-    public String mct() throws Exception {
-        Map<String, Long> map = new MoreCustomerTime().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            Mct mct = new Mct();
-            mct.setHour(m.getKey());
-            mct.setCount(m.getValue());
-            mctDAO.save(mct);
+    public String mct() {
+        try {
+            Map<String, Long> map = new MoreCustomerTime().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                Mct mct = new Mct();
+                mct.setHour(m.getKey());
+                mct.setCount(m.getValue());
+                mctDAO.save(mct);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
     }
 
     @RequestMapping("/gpt")
-    public String gpt() throws Exception {
-        Map<String, Long> map = new GetPlatoonTime().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            String passagernum = m.getKey().split(",")[0];
-            String time = m.getKey().split(",")[1];
-            Gpt gpt = new Gpt();
-            gpt.setPassagernum(passagernum);
-            gpt.setTime(time);
-            gpt.setCount(m.getValue());
-            gptDAO.save(gpt);
+    public String gpt() {
+        try {
+            Map<String, Long> map = new GetPlatoonTime().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                String passagernum = m.getKey().split(",")[0];
+                String time = m.getKey().split(",")[1];
+                Gpt gpt = new Gpt();
+                gpt.setPassagernum(passagernum);
+                gpt.setTime(time);
+                gpt.setCount(m.getValue());
+                gptDAO.save(gpt);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
     }
 
     @RequestMapping("/dcct")
-    public String dcct() throws Exception {
-        Map<String, Long> map = new DistanceCount().run();
-        for (Map.Entry<String, Long> m : map.entrySet()) {
-            DcCt dcCt = new DcCt();
-            dcCt.setDistance(m.getKey());
-            dcCt.setCount(m.getValue());
-            dcDAO.save(dcCt);
+    public String dcct() {
+        try {
+            Map<String, Long> map = new DistanceCount().run();
+            for (Map.Entry<String, Long> m : map.entrySet()) {
+                DcCt dcCt = new DcCt();
+                dcCt.setDistance(m.getKey());
+                dcCt.setCount(m.getValue());
+                dcDAO.save(dcCt);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
         }
-        return "success.html";
     }
 
     @RequestMapping("/cte")
-    public String cte() throws Exception {
-        List<List<Double>> lists = new Center().run();
+    public String cte() {
+        try {
+            List<List<Double>> lists = new GeoCenter().run();
+            for (List<Double> list : lists) {
+                Cte cte = new Cte();
+                cte.setLatitude(list.get(0));
+                cte.setLongitude(list.get(1));
+                cteDAO.save(cte);
+            }
+            return "success.html";
+        }catch (Exception e) {
+            return "error.html";
+        }
     }
-
-    @RequestMapping("/ce")
-    public String ce() {
-        return "success.html";
-    }
-
 }

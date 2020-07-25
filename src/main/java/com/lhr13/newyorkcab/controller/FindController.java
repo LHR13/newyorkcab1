@@ -30,6 +30,8 @@ public class FindController {
     private GptDAO gptDAO;
     @Autowired
     private DCDAO dcDAO;
+    @Autowired
+    private CteDAO cteDAO;
 
     @RequestMapping("/dayfindAll")
     @ResponseBody
@@ -124,5 +126,11 @@ public class FindController {
             }
         });
         return all;
+    }
+
+    @RequestMapping("/ctefindAll")
+    @ResponseBody
+    public List<Cte> ctefindAll() {
+        return cteDAO.findAll();
     }
 }
